@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import SmoothScrollProvider from "@/providers/SmoothScrollProvider";
+import LanguageProvider from "@/providers/LanguageProvider";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Services from "@/components/Services";
@@ -17,23 +18,25 @@ const DecorativeLines = dynamic(() => import("@/components/DecorativeLines"), { 
 
 export default function Home() {
   return (
-    <SmoothScrollProvider>
-      <Preloader />
-      <CustomCursor />
-      <ParticleField />
-      <FloatingDots />
-      <DecorativeLines />
+    <LanguageProvider>
+      <SmoothScrollProvider>
+        <Preloader />
+        <CustomCursor />
+        <ParticleField />
+        <FloatingDots />
+        <DecorativeLines />
 
-      <Navbar />
+        <Navbar />
 
-      <main>
-        <Hero />
-        <Services />
-        <Portfolio />
-        <Contact />
-      </main>
+        <main>
+          <Hero />
+          <Services />
+          <Portfolio />
+          <Contact />
+        </main>
 
-      <Footer />
-    </SmoothScrollProvider>
+        <Footer />
+      </SmoothScrollProvider>
+    </LanguageProvider>
   );
 }

@@ -2,8 +2,10 @@
 
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { NAV_LINKS } from "@/lib/constants";
+import { useLanguage } from "@/providers/LanguageProvider";
 import { X } from "lucide-react";
+
+const SECTION_IDS = ["inicio", "servicios", "trabajos", "contacto"];
 
 interface MobileMenuProps {
   open: boolean;
@@ -11,8 +13,14 @@ interface MobileMenuProps {
 }
 
 export default function MobileMenu({ open, onClose }: MobileMenuProps) {
+  const { locale, t, toggleLocale } = useLanguage();
   const overlayRef = useRef<HTMLDivElement>(null);
   const linksRef = useRef<HTMLDivElement>(null);
+
+  const navLinks = SECTION_IDS.map((id) => ({
+    href: `#${id}`,
+    label: t.nav[id as keyof typeof t.nav],
+  }));
 
   useEffect(() => {
     if (!overlayRef.current || !linksRef.current) return;
@@ -54,7 +62,7 @@ export default function MobileMenu({ open, onClose }: MobileMenuProps) {
       </button>
 
       <div ref={linksRef} className="flex flex-col items-center gap-8">
-        {NAV_LINKS.map((link) => (
+        {navLinks.map((link) => (
           <a
             key={link.href}
             href={link.href}
@@ -64,6 +72,13 @@ export default function MobileMenu({ open, onClose }: MobileMenuProps) {
             {link.label}
           </a>
         ))}
+
+        <button
+          onClick={toggleLocale}
+          className="text-xl text-text-muted hover:text-accent transition-colors duration-300 border border-text-muted/30 hover:border-accent/50 rounded-full px-6 py-2 mt-4"
+        >
+          {locale === "es" ? "English" : "Español"}
+        </button>
       </div>
     </div>
   );

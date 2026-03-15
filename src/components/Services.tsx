@@ -4,11 +4,13 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SERVICES } from "@/lib/constants";
+import { useLanguage } from "@/providers/LanguageProvider";
 import ServiceCard from "./ServiceCard";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Services() {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
@@ -17,7 +19,6 @@ export default function Services() {
     if (!sectionRef.current || !titleRef.current || !cardsRef.current) return;
 
     const ctx = gsap.context(() => {
-      // Title animation
       const chars = titleRef.current!.querySelectorAll(".char");
       gsap.fromTo(
         chars,
@@ -36,7 +37,6 @@ export default function Services() {
         }
       );
 
-      // Cards animation
       const cards = cardsRef.current!.querySelectorAll(".service-card");
       gsap.fromTo(
         cards,
@@ -59,11 +59,10 @@ export default function Services() {
     return () => ctx.revert();
   }, []);
 
-  // Split title into chars with highlight
   const renderTitle = () => {
-    const words = SERVICES.title.split(" ");
+    const words = t.services.title.split(" ");
     return words.map((word, wi) => {
-      const isHighlight = word.toLowerCase() === SERVICES.highlightWord;
+      const isHighlight = word.toLowerCase() === t.services.highlightWord;
       return (
         <span key={wi} className="inline-block" style={{ marginRight: "0.3em" }}>
           {word.split("").map((char, ci) => (
@@ -96,8 +95,8 @@ export default function Services() {
           {SERVICES.items.map((service, i) => (
             <ServiceCard
               key={service.title}
-              title={service.title}
-              description={service.description}
+              title={t.services.items[i].title}
+              description={t.services.items[i].description}
               icon={service.icon}
               index={i}
             />

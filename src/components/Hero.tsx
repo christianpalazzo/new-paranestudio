@@ -3,12 +3,15 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ArrowRight, ChevronDown } from "lucide-react";
-import { HERO } from "@/lib/constants";
+import { useLanguage } from "@/providers/LanguageProvider";
 import dynamic from "next/dynamic";
 
 const HeroCanvas = dynamic(() => import("./HeroCanvas"), { ssr: false });
 
+const BEHANCE_URL = "https://www.behance.net/pranaestudio";
+
 export default function Hero() {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const ctaRef = useRef<HTMLAnchorElement>(null);
@@ -17,7 +20,6 @@ export default function Hero() {
   useEffect(() => {
     const tl = gsap.timeline({ delay: 1.5 });
 
-    // Split headline into words
     if (headlineRef.current) {
       const words = headlineRef.current.querySelectorAll(".word");
       tl.fromTo(
@@ -27,7 +29,6 @@ export default function Hero() {
       );
     }
 
-    // CTA button
     if (ctaRef.current) {
       tl.fromTo(
         ctaRef.current,
@@ -37,7 +38,6 @@ export default function Hero() {
       );
     }
 
-    // Scroll indicator
     if (scrollRef.current) {
       tl.fromTo(
         scrollRef.current,
@@ -48,13 +48,12 @@ export default function Hero() {
     }
   }, []);
 
-  // Split headline into words with highlight
   const renderHeadline = () => {
-    const words = HERO.headline.split(" ");
+    const words = t.hero.headline.split(" ");
     return words.map((word, i) => {
       const cleanWord = word.replace(/[.,]/g, "");
       const punctuation = word.replace(cleanWord, "");
-      const isHighlight = cleanWord.toLowerCase() === HERO.highlightWord;
+      const isHighlight = cleanWord.toLowerCase() === t.hero.highlightWord;
 
       return (
         <span key={i} className="word inline-block" style={{ marginRight: "0.3em" }}>
@@ -90,12 +89,12 @@ export default function Hero() {
 
           <a
             ref={ctaRef}
-            href={HERO.cta.href}
+            href={BEHANCE_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="magnetic-btn inline-flex items-center gap-3 mt-12 px-8 py-4 bg-white text-bg-primary rounded-full font-medium text-base hover:bg-accent hover:text-bg-primary transition-all duration-300 group"
           >
-            {HERO.cta.text}
+            {t.hero.cta}
             <ArrowRight
               size={18}
               className="transition-transform duration-300 group-hover:translate-x-1"
@@ -109,7 +108,7 @@ export default function Hero() {
         ref={scrollRef}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-text-muted"
       >
-        <span className="text-xs tracking-widest uppercase">Scroll</span>
+        <span className="text-xs tracking-widest uppercase">{t.scroll}</span>
         <ChevronDown size={20} className="animate-bounce" />
       </div>
     </section>

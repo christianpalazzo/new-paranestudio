@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { CONTACT } from "@/lib/constants";
+import { useLanguage } from "@/providers/LanguageProvider";
 import { Phone, Instagram, Pen, Mail, MapPin } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -16,6 +17,7 @@ const ICONS = {
 };
 
 export default function Contact() {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const pillsRef = useRef<HTMLDivElement>(null);
@@ -89,9 +91,9 @@ export default function Contact() {
           <div>
             <h2 ref={headingRef} className="font-heading text-5xl sm:text-6xl md:text-7xl font-bold leading-[1.1] relative">
               <span className="text-reveal opacity-0">
-                {CONTACT.heading.split(" ").map((word, i) => (
+                {t.contact.heading.split(" ").map((word, i) => (
                   <span key={i} className="inline-block" style={{ marginRight: "0.3em" }}>
-                    {word === "idea" ? (
+                    {word.toLowerCase() === "idea" ? (
                       <span className="text-accent">{word}</span>
                     ) : (
                       word
@@ -102,7 +104,7 @@ export default function Contact() {
               <span className="text-wiper absolute inset-0 bg-accent origin-left" style={{ transform: "scaleX(0)" }} />
             </h2>
             <p className="subheading text-2xl text-text-secondary mt-4 font-heading">
-              {CONTACT.subheading}
+              {t.contact.subheading}
             </p>
 
             {/* Logo */}

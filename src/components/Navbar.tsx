@@ -1,13 +1,22 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { NAV_LINKS, BRAND } from "@/lib/constants";
+import { BRAND } from "@/lib/constants";
+import { useLanguage } from "@/providers/LanguageProvider";
 import MobileMenu from "./MobileMenu";
 
+const SECTION_IDS = ["inicio", "servicios", "trabajos", "contacto"];
+
 export default function Navbar() {
+  const { locale, t, toggleLocale } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("inicio");
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const navLinks = SECTION_IDS.map((id) => ({
+    href: `#${id}`,
+    label: t.nav[id as keyof typeof t.nav],
+  }));
 
   useEffect(() => {
     const handleScroll = () => {
@@ -63,7 +72,7 @@ export default function Navbar() {
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-8">
-            {NAV_LINKS.map((link) => (
+            {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
@@ -80,6 +89,14 @@ export default function Navbar() {
                 />
               </a>
             ))}
+
+            {/* Language toggle */}
+            <button
+              onClick={toggleLocale}
+              className="text-sm text-text-muted hover:text-accent transition-colors duration-300 border border-text-muted/30 hover:border-accent/50 rounded-full px-3 py-1"
+            >
+              {locale === "es" ? "EN" : "ES"}
+            </button>
           </div>
 
           {/* Mobile Hamburger */}
